@@ -2,7 +2,7 @@
 
 # General info
 
-This is the app to manage users.
+This is the app to manage employees.
 <br />
 
 ## What's inside?
@@ -10,6 +10,7 @@ This is the app to manage users.
 ✔ Angular 18<br />
 ✔ TypeScript<br />
 ✔ JavaScript<br />
+✔ RxJS<br />
 ✔ Rest API<br />
 ✔ Airtable<br />
 ✔ React Testing Library<br />
