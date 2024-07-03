@@ -1,0 +1,16 @@
+header {
+  max-width: 1440px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 10px;
+  border-bottom: 1px solid gray;
+  margin-bottom: 24px;
+}
+
+nav {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
