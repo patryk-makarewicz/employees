@@ -29,7 +29,10 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "./node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
+              "src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {
