@@ -28,7 +28,16 @@ main {
   min-height: 100dvh;
 }
 
-app-home-page {
+h1,
+h2,
+h3,
+h4 {
+  text-align: center;
+}
+
+app-home-page,
+app-employees-page,
+app-contact-page {
   flex: 1;
 }
 
