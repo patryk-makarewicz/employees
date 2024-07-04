@@ -2,7 +2,10 @@
   <div class="content">
     <img [ngSrc]="logoUrl" [alt]="logoAlt" width="147" height="36" />
     <h1>{{ title }}</h1>
-    <h2>{{ description }}</h2>
+    <h2>
+      {{ description }}
+      <span nz-icon nzType="user-switch" nzTheme="outline" style="font-size: 24px; color: #1890ff"></span>
+    </h2>
     <app-button label="Get started" (click)="getStarted()" />
   </div>
 </div>
