@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { EmployeesModel } from '../../../service/employees.model';
-import { EmployeesService } from '../../../service/employees.service';
+import { EmployeesModel } from '../../service/employees.model';
+import { EmployeesService } from '../../service/employees.service';
 
 @Component({
   selector: 'app-employees-page',
