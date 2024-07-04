@@ -1,20 +1,20 @@
 import { Routes } from '@angular/router';
-import { HomePageComponent, EmployeesPageComponent, ContactPageComponent } from './pages';
+import { HomePageComponent, EmployeesPageComponent, AboutPageComponent } from './pages';
 
 export const routes: Routes = [
   {
     path: '',
-    title: 'Employees - Home',
+    title: 'Home',
     component: HomePageComponent,
   },
   {
     path: 'employees',
-    title: 'Employees - Manage',
+    title: 'Employees',
     component: EmployeesPageComponent,
   },
   {
-    path: 'contact',
-    title: 'Employees - Contact',
-    component: ContactPageComponent,
+    path: 'about',
+    title: 'About',
+    component: AboutPageComponent,
   },
 ];
