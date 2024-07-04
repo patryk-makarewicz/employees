@@ -3,6 +3,7 @@ import { RouterLink, Router, NavigationEnd, Event } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { filter, map } from 'rxjs/operators';
+import { routes } from '../../app.routes';
 
 @Component({
   selector: 'app-header',
@@ -15,6 +16,7 @@ export class HeaderComponent implements OnInit {
   logoUrl = '/assets/makaDev.png';
   logoAlt = 'makaDev logo';
   currentRoute = '/';
+  routes = routes;
 
   constructor(private router: Router) {}
 

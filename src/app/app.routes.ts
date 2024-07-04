@@ -4,17 +4,17 @@ import { HomePageComponent, EmployeesPageComponent, AboutPageComponent } from '.
 export const routes: Routes = [
   {
     path: '',
-    title: 'Employees - Home',
+    title: 'Home',
     component: HomePageComponent,
   },
   {
     path: 'employees',
-    title: 'Employees - Manage',
+    title: 'Employees',
     component: EmployeesPageComponent,
   },
   {
     path: 'about',
-    title: 'Employees - About',
+    title: 'About',
     component: AboutPageComponent,
   },
 ];

@@ -3,15 +3,11 @@
   <h1>Employees</h1>
   <nav>
     <ul nz-menu nzMode="horizontal">
-      <li nz-menu-item [nzSelected]="isActive('/')">
-        <a routerLink="/">Home</a>
-      </li>
-      <li nz-menu-item [nzSelected]="isActive('/employees')">
-        <a routerLink="/employees">Employees</a>
-      </li>
-      <li nz-menu-item [nzSelected]="isActive('/contact')">
-        <a routerLink="/about">About</a>
-      </li>
+      @for (route of routes; track route.path) {
+        <li nz-menu-item [nzSelected]="isActive('/' + route.path)">
+          <a [routerLink]="route.path">{{ route.title }}</a>
+        </li>
+      }
     </ul>
   </nav>
 </header>
