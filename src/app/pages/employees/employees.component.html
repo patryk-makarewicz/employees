@@ -1,6 +1,24 @@
 <div class="wrapper">
-  <div class="content">
-    <span nz-icon nzType="highlight" nzTheme="fill" style="font-size: 48px; color: #1890ff"></span>
-    <h2>Employees tab - in construction</h2>
-  </div>
+  <nz-table #basicTable [nzData]="employees">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Position</th>
+        <th>FTE</th>
+        <th>Salary</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (employee of employees; track employee.id) {
+        <tr>
+          <td>{{ employee.fields.name }}</td>
+          <td>{{ employee.fields.surname }}</td>
+          <td>{{ employee.fields.position }}</td>
+          <td>{{ employee.fields.FTE * 100 + '%' }}</td>
+          <td>{{ '$' + employee.fields.salary }}</td>
+        </tr>
+      }
+    </tbody>
+  </nz-table>
 </div>
