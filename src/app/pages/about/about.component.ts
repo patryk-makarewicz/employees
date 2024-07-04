@@ -11,8 +11,8 @@ import { NgOptimizedImage } from '@angular/common';
   styleUrl: './about.component.scss',
 })
 export class AboutPageComponent {
-  logoUrl = '/assets/makaDev.png';
-  logoAlt = 'logo';
+  logoUrl = '/assets/me.jpg';
+  logoAlt = 'My photo';
   imageUrl = 'cover.png';
   imageAlt = 'Image makaDev';
   githubUrl = '/assets/github.svg';
