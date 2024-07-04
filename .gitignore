@@ -32,6 +32,6 @@ yarn-error.log*
 
 # local env files
 /src/environments
-.env*
+.env.local
 # Local Netlify folder
 .netlify
