@@ -2,7 +2,7 @@
 
 # General info
 
-This is the app to manage employees.
+This is the app to manage employees (in construction).
 <br />
 
 ## What's inside?
@@ -11,6 +11,7 @@ This is the app to manage employees.
 ✔ TypeScript<br />
 ✔ JavaScript<br />
 ✔ Rest API<br />
+✔ RxJS<br />
 ✔ Airtable<br />
 ✔ React Testing Library<br />
 ✔ HTML5<br />
