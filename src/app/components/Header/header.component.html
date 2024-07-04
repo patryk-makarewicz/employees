@@ -1,14 +1,15 @@
 <header>
   <img [ngSrc]="logoUrl" [alt]="logoAlt" width="40" height="40" />
+  <h1>Employees</h1>
   <nav>
     <ul nz-menu nzMode="horizontal">
-      <li nz-menu-item nzSelected>
+      <li nz-menu-item [nzSelected]="isActive('/')">
         <a routerLink="/">Home</a>
       </li>
-      <li nz-menu-item>
-        <a routerLink="/users">Users</a>
+      <li nz-menu-item [nzSelected]="isActive('/employees')">
+        <a routerLink="/employees">Employees</a>
       </li>
-      <li nz-menu-item>
+      <li nz-menu-item [nzSelected]="isActive('/contact')">
         <a routerLink="/contact">Contact</a>
       </li>
     </ul>
