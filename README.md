@@ -13,7 +13,7 @@ This is the app to manage employees (in construction).
 ✔ Rest API<br />
 ✔ RxJS<br />
 ✔ Airtable<br />
-✔ React Testing Library<br />
+✔ Jest<br />
 ✔ HTML5<br />
 ✔ CSS3<br />
 ✔ Ant Design<br />
