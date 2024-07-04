@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @Component({
-  selector: 'app-contact-page',
+  selector: 'app-about-page',
   standalone: true,
   imports: [NzIconModule],
-  templateUrl: './contact.component.html',
-  styleUrl: './contact.component.scss',
+  templateUrl: './about.component.html',
+  styleUrl: './about.component.scss',
 })
-export class ContactPageComponent {}
+export class AboutPageComponent {}
