@@ -10,7 +10,6 @@ This is the app to manage employees.
 ✔ Angular 18<br />
 ✔ TypeScript<br />
 ✔ JavaScript<br />
-✔ RxJS<br />
 ✔ Rest API<br />
 ✔ Airtable<br />
 ✔ React Testing Library<br />
@@ -22,7 +21,7 @@ This is the app to manage employees.
 
 To watch click [here]
 
-[here]: https://angular.io
+[here]: https://employess.netlify.app/
 
 # App
 
