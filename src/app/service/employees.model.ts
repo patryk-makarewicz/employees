@@ -1,13 +1,15 @@
+export interface Fields {
+  name: string;
+  surname: string;
+  position: string;
+  fte: number;
+  salary: number;
+}
+
 export interface EmployeesModel {
   id: string;
   createdTime: string;
-  fields: {
-    name: string;
-    surname: string;
-    position: string;
-    fte: number;
-    salary: number;
-  };
+  fields: Fields;
 }
 
 export interface EmployeesDTO {
@@ -16,16 +18,13 @@ export interface EmployeesDTO {
 
 export interface CreateEmployeeModel {
   records: {
-    fields: {
-      name: string;
-      surname: string;
-      position: string;
-      fte: number;
-      salary: number;
-    };
+    fields: Fields;
   }[];
 }
 
-export interface RemoveEmployeeModel {
-  id: string;
+export interface EditEmployeeModel {
+  records: {
+    id: string;
+    fields: Fields;
+  }[];
 }

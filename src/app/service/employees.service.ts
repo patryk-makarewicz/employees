@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 
 import { Injectable } from '@angular/core';
-import { CreateEmployeeModel, EmployeesDTO, RemoveEmployeeModel } from './employees.model';
+import { CreateEmployeeModel, EditEmployeeModel, EmployeesDTO, EmployeesModel } from './employees.model';
 import { Observable } from 'rxjs';
 import { BASE_URL, headers } from './config';
 
@@ -20,15 +20,28 @@ export class EmployeesService {
     });
   }
 
+  getEmployee(id: string): Observable<EmployeesModel> {
+    const url = `${this.baseApiUrl}/${id}`;
+    return this.http.get<EmployeesModel>(url, {
+      headers,
+    });
+  }
+
   addEmployee(newEmployee: CreateEmployeeModel): Observable<EmployeesDTO> {
     return this.http.post<EmployeesDTO>(this.baseApiUrl, newEmployee, {
       headers,
     });
   }
 
-  removeEmployee({ id }: RemoveEmployeeModel): Observable<EmployeesDTO> {
+  removeEmployee(id: string): Observable<EmployeesDTO> {
     const url = `${this.baseApiUrl}/${id}`;
     return this.http.delete<EmployeesDTO>(url, {
+      headers,
+    });
+  }
+
+  editEmployee(newEmployee: EditEmployeeModel): Observable<EmployeesDTO> {
+    return this.http.put<EmployeesDTO>(this.baseApiUrl, newEmployee, {
       headers,
     });
   }
