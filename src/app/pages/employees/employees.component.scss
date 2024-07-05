@@ -1,8 +1,17 @@
-.content {
+.button {
+  margin-bottom: 24px;
+}
+
+.loading {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-bottom: 36px;
+  height: 280px;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
 }
