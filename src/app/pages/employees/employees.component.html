@@ -1,9 +1,9 @@
 <div class="wrapper">
   <nz-modal
     [(nzVisible)]="isModalAddEmployeeVisible"
-    nzTitle="Add new Employee"
+    [nzTitle]="editingEmployeeId ? 'Edit Employee' : 'Add new Employee'"
     (nzOnCancel)="onCloseAddEmployeeModal()"
-    (nzOnOk)="addEmployee()"
+    (nzOnOk)="saveEmployee()"
     nzAfterClose="destroy()"
   >
     <ng-container *nzModalContent>
@@ -81,11 +81,11 @@
           <td>{{ employee.fields.fte * 100 + '%' }}</td>
           <td>{{ '$' + employee.fields.salary }}</td>
           <td>
-            <button nz-button nzType="primary" nzShape="circle" (click)="editEmployee()" disabled>
+            <button nz-button nzType="primary" nzShape="circle" (click)="getEmployee(employee.id)">
               <span nz-icon nzType="edit" nzTheme="outline"></span>
             </button>
             <nz-divider nzType="vertical"></nz-divider>
-            <button nz-button nzType="primary" nzShape="circle" nzDanger (click)="removeEmployee({ id: employee.id })">
+            <button nz-button nzType="primary" nzShape="circle" nzDanger (click)="removeEmployee(employee.id)">
               <span nz-icon nzType="delete" nzTheme="outline"></span>
             </button>
           </td>

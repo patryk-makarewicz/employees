@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { EmployeesModel, RemoveEmployeeModel } from '../../service/employees.model';
+import { EmployeesModel } from '../../service/employees.model';
 import { EmployeesService } from '../../service/employees.service';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
 import { ButtonComponent } from '../../components';
@@ -15,7 +15,6 @@ import {
   NonNullableFormBuilder,
 } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
-
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -42,6 +41,8 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 export class EmployeesPageComponent implements OnInit {
   employeesList: EmployeesModel[] = [];
   isEmployeesListLoading = true;
+  editingEmployeeId: string | null = null;
+  isModalAddEmployeeVisible = false;
 
   constructor(
     private employees_service: EmployeesService,
@@ -86,37 +87,13 @@ export class EmployeesPageComponent implements OnInit {
     salary: [0, [Validators.required, Validators.min(0), Validators.max(1000000)]],
   });
 
-  addEmployee(): void {
+  saveEmployee(): void {
     if (this.createEmployeeForm.valid) {
-      this.isEmployeesListLoading = true;
-      this.employees_service
-        .addEmployee({
-          records: [
-            {
-              fields: {
-                name: this.createEmployeeForm.value.name!,
-                surname: this.createEmployeeForm.value.surname!,
-                position: this.createEmployeeForm.value.position!,
-                fte: this.createEmployeeForm.value.fte! / 100,
-                salary: this.createEmployeeForm.value.salary!,
-              },
-            },
-          ],
-        })
-        .subscribe({
-          next: () => {
-            this.getEmployeesList();
-            this.createMessage('success', 'Employee added successfully');
-            this.createEmployeeForm.reset();
-          },
-          error: (error) => {
-            this.isEmployeesListLoading = false;
-            this.createMessage('error', 'Failed to add employee');
-            console.error(error);
-          },
-        });
-      console.log('submit', this.createEmployeeForm.value);
-      this.isModalAddEmployeeVisible = false;
+      if (this.editingEmployeeId) {
+        this.editEmployee();
+      } else {
+        this.addEmployee();
+      }
     } else {
       Object.values(this.createEmployeeForm.controls).forEach((control) => {
         if (control.invalid) {
@@ -127,7 +104,38 @@ export class EmployeesPageComponent implements OnInit {
     }
   }
 
-  removeEmployee(id: RemoveEmployeeModel) {
+  addEmployee(): void {
+    this.isEmployeesListLoading = true;
+    this.employees_service
+      .addEmployee({
+        records: [
+          {
+            fields: {
+              name: this.createEmployeeForm.value.name!,
+              surname: this.createEmployeeForm.value.surname!,
+              position: this.createEmployeeForm.value.position!,
+              fte: this.createEmployeeForm.value.fte! / 100,
+              salary: this.createEmployeeForm.value.salary!,
+            },
+          },
+        ],
+      })
+      .subscribe({
+        next: () => {
+          this.getEmployeesList();
+          this.createMessage('success', 'Employee added successfully');
+          this.createEmployeeForm.reset();
+          this.isModalAddEmployeeVisible = false;
+        },
+        error: (error) => {
+          this.isEmployeesListLoading = false;
+          this.createMessage('error', 'Failed to add employee');
+          console.error(error);
+        },
+      });
+  }
+
+  removeEmployee(id: string) {
     this.isEmployeesListLoading = true;
     this.employees_service.removeEmployee(id).subscribe({
       next: () => {
@@ -141,17 +149,70 @@ export class EmployeesPageComponent implements OnInit {
       },
     });
   }
-  editEmployee() {
-    console.log('Edit employee');
+
+  getEmployee(id: string) {
+    this.isModalAddEmployeeVisible = true;
+    this.editingEmployeeId = id;
+    this.employees_service.getEmployee(id).subscribe({
+      next: (employee) => {
+        this.createEmployeeForm.patchValue({
+          name: employee.fields.name,
+          surname: employee.fields.surname,
+          position: employee.fields.position,
+          fte: employee.fields.fte * 100,
+          salary: employee.fields.salary,
+        });
+        console.log(employee);
+      },
+      error: (error) => {
+        this.createMessage('error', 'Failed to get employee data');
+        console.error(error);
+      },
+    });
   }
 
-  isModalAddEmployeeVisible = false;
+  editEmployee(): void {
+    this.isEmployeesListLoading = true;
+    this.employees_service
+      .editEmployee({
+        records: [
+          {
+            id: this.editingEmployeeId!,
+            fields: {
+              name: this.createEmployeeForm.value.name!,
+              surname: this.createEmployeeForm.value.surname!,
+              position: this.createEmployeeForm.value.position!,
+              fte: this.createEmployeeForm.value.fte! / 100,
+              salary: this.createEmployeeForm.value.salary!,
+            },
+          },
+        ],
+      })
+      .subscribe({
+        next: () => {
+          this.getEmployeesList();
+          this.createMessage('success', 'Employee edited successfully');
+          this.createEmployeeForm.reset();
+          this.isModalAddEmployeeVisible = false;
+          this.editingEmployeeId = null;
+        },
+        error: (error) => {
+          this.isEmployeesListLoading = false;
+          this.createMessage('error', 'Failed to edit employee');
+          console.error(error);
+        },
+      });
+  }
+
   openAddEmployeeModal(): void {
     this.isModalAddEmployeeVisible = true;
+    this.editingEmployeeId = null;
+    this.createEmployeeForm.reset();
   }
 
   onCloseAddEmployeeModal(): void {
     this.isModalAddEmployeeVisible = false;
     this.createEmployeeForm.reset();
+    this.editingEmployeeId = null;
   }
 }
