@@ -18,6 +18,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @Component({
   selector: 'app-employees-page',
@@ -34,6 +35,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
     NzModalModule,
     NzFormModule,
     NzInputModule,
+    NzSpinModule,
   ],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.scss',
@@ -41,6 +43,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 export class EmployeesPageComponent implements OnInit {
   employeesList: EmployeesModel[] = [];
   isEmployeesListLoading = true;
+  isEmployeeDataLoading = false;
   isSaveLoading = false;
   editingEmployeeId: string | null = null;
   isModalAddEmployeeVisible = false;
@@ -156,6 +159,7 @@ export class EmployeesPageComponent implements OnInit {
 
   getEmployee(id: string) {
     this.isModalAddEmployeeVisible = true;
+    this.isEmployeeDataLoading = true;
     this.editingEmployeeId = id;
     this.employees_service.getEmployee(id).subscribe({
       next: (employee) => {
@@ -166,9 +170,10 @@ export class EmployeesPageComponent implements OnInit {
           fte: employee.fields.fte * 100,
           salary: employee.fields.salary,
         });
-        console.log(employee);
+        this.isEmployeeDataLoading = false;
       },
       error: (error) => {
+        this.isEmployeeDataLoading = false;
         this.createMessage('error', 'Failed to get employee data');
         console.error(error);
       },
