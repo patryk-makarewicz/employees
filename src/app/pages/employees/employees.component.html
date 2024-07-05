@@ -1,8 +1,7 @@
 <div class="wrapper">
   <div class="buttons">
-    <app-button label="Add" (click)="addEmployee()" />
-    <app-button label="Edit" (click)="editEmployee()" nzGhost />
-    <app-button label="Remove" (click)="removeEmployee()" type="default" nzDanger />
+    <!-- <app-button label="Add" (click)="addEmployee()" /> -->
+    <app-button label="Add Employee" />
   </div>
 
   <nz-table #employeesTable [nzData]="employeesList" [nzLoading]="isEmployeesListLoading">
@@ -13,6 +12,7 @@
         <th>Position</th>
         <th>FTE</th>
         <th>Salary</th>
+        <th>ACTIONS</th>
       </tr>
     </thead>
     <tbody>
@@ -21,10 +21,45 @@
           <td>{{ employee.fields.name }}</td>
           <td>{{ employee.fields.surname }}</td>
           <td>{{ employee.fields.position }}</td>
-          <td>{{ employee.fields.FTE * 100 + '%' }}</td>
+          <td>{{ employee.fields.fte * 100 + '%' }}</td>
           <td>{{ '$' + employee.fields.salary }}</td>
+          <td>
+            <button nz-button nzType="primary" nzShape="circle" (click)="editEmployee()" disabled>
+              <span nz-icon nzType="edit" nzTheme="outline"></span>
+            </button>
+            <nz-divider nzType="vertical"></nz-divider>
+            <button nz-button nzType="primary" nzShape="circle" nzDanger (click)="removeEmployee({ id: employee.id })">
+              <span nz-icon nzType="delete" nzTheme="outline"></span>
+            </button>
+          </td>
         </tr>
       }
     </tbody>
   </nz-table>
+
+  <div>
+    <form [formGroup]="createEmployeeForm" (ngSubmit)="addEmployee()">
+      <label>
+        Name
+        <input type="text" formControlName="name" />
+      </label>
+      <label>
+        Surname
+        <input type="text" formControlName="surname" />
+      </label>
+      <label>
+        Position
+        <input type="text" formControlName="position" />
+      </label>
+      <label>
+        FTE
+        <input type="text" formControlName="fte" />
+      </label>
+      <label>
+        Salary
+        <input type="text" formControlName="salary" />
+      </label>
+      <button type="submit" [disabled]="!createEmployeeForm.valid">Submit</button>
+    </form>
+  </div>
 </div>
