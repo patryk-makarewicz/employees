@@ -1,12 +1,5 @@
 <div class="wrapper">
-  <div class="content">
-    <h2>
-      Employees tab - in construction
-      <span nz-icon nzType="highlight" nzTheme="fill" style="font-size: 24px; color: #1890ff"></span>
-    </h2>
-  </div>
-
-  <nz-table #basicTable [nzData]="employees">
+  <nz-table #employeesTable [nzData]="employeesList" [nzLoading]="isEmployeesListLoading">
     <thead>
       <tr>
         <th>Name</th>
@@ -17,7 +10,7 @@
       </tr>
     </thead>
     <tbody>
-      @for (employee of employees; track employee.id) {
+      @for (employee of employeesList; track employee.id) {
         <tr>
           <td>{{ employee.fields.name }}</td>
           <td>{{ employee.fields.surname }}</td>

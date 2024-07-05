@@ -4,32 +4,38 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { EmployeesModel } from '../../service/employees.model';
 import { EmployeesService } from '../../service/employees.service';
+import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-employees-page',
   standalone: true,
-  imports: [NzIconModule, NzTableModule, NzDividerModule],
+  imports: [NzIconModule, NzTableModule, NzDividerModule, NzMessageModule],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.scss',
 })
 export class EmployeesPageComponent implements OnInit {
-  employees: EmployeesModel[] = [];
-  errorMessage!: string;
-  isLoading = true;
-  isError = false;
+  employeesList: EmployeesModel[] = [];
+  isEmployeesListLoading = true;
 
-  constructor(private employees_service: EmployeesService) {}
+  constructor(
+    private employees_service: EmployeesService,
+    private message: NzMessageService
+  ) {}
+
+  createMessage(type: string, content: string): void {
+    this.message.create(type, content);
+  }
 
   ngOnInit() {
     this.employees_service.getEmployeesList().subscribe({
-      next: (employees) => {
-        this.employees = employees.records;
-        this.isLoading = false;
+      next: (employeesList) => {
+        this.employeesList = employeesList.records;
+        this.isEmployeesListLoading = false;
       },
       error: (error) => {
-        this.errorMessage = error;
-        this.isError = true;
-        this.isLoading = false;
+        this.isEmployeesListLoading = false;
+        this.createMessage('error', 'Failed to load employees');
+        console.error(error);
       },
     });
   }
