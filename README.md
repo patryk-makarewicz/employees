@@ -2,7 +2,7 @@
 
 # General info
 
-This is the app to manage employees (in construction).
+This is the app to manage employees.
 <br />
 
 ## What's inside?

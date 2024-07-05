@@ -6,8 +6,19 @@ import { EmployeesModel, RemoveEmployeeModel } from '../../service/employees.mod
 import { EmployeesService } from '../../service/employees.service';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
 import { ButtonComponent } from '../../components';
-import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormControl,
+  FormGroup,
+  Validators,
+  NonNullableFormBuilder,
+} from '@angular/forms';
+import { NzInputModule } from 'ng-zorro-antd/input';
+
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzFormModule } from 'ng-zorro-antd/form';
 
 @Component({
   selector: 'app-employees-page',
@@ -21,6 +32,9 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
     FormsModule,
     ReactiveFormsModule,
     NzButtonModule,
+    NzModalModule,
+    NzFormModule,
+    NzInputModule,
   ],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.scss',
@@ -31,7 +45,8 @@ export class EmployeesPageComponent implements OnInit {
 
   constructor(
     private employees_service: EmployeesService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private fb: NonNullableFormBuilder
   ) {}
 
   createMessage(type: string, content: string): void {
@@ -57,41 +72,59 @@ export class EmployeesPageComponent implements OnInit {
     });
   }
 
-  createEmployeeForm = new FormGroup({
-    name: new FormControl('', Validators.required),
-    surname: new FormControl('', Validators.required),
-    position: new FormControl('', Validators.required),
-    fte: new FormControl(0, Validators.required),
-    salary: new FormControl(0, Validators.required),
+  createEmployeeForm: FormGroup<{
+    name: FormControl<string>;
+    surname: FormControl<string>;
+    position: FormControl<string>;
+    fte: FormControl<number>;
+    salary: FormControl<number>;
+  }> = this.fb.group({
+    name: ['', [Validators.required]],
+    surname: ['', [Validators.required]],
+    position: ['', [Validators.required]],
+    fte: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
+    salary: [0, [Validators.required, Validators.min(0), Validators.max(1000000)]],
   });
 
-  addEmployee() {
-    this.isEmployeesListLoading = true;
-    this.employees_service
-      .addEmployee({
-        records: [
-          {
-            fields: {
-              name: this.createEmployeeForm.value.name!,
-              surname: this.createEmployeeForm.value.surname!,
-              position: this.createEmployeeForm.value.position!,
-              fte: Number(this.createEmployeeForm.value.fte),
-              salary: Number(this.createEmployeeForm.value.salary),
+  addEmployee(): void {
+    if (this.createEmployeeForm.valid) {
+      this.isEmployeesListLoading = true;
+      this.employees_service
+        .addEmployee({
+          records: [
+            {
+              fields: {
+                name: this.createEmployeeForm.value.name!,
+                surname: this.createEmployeeForm.value.surname!,
+                position: this.createEmployeeForm.value.position!,
+                fte: this.createEmployeeForm.value.fte! / 100,
+                salary: this.createEmployeeForm.value.salary!,
+              },
             },
+          ],
+        })
+        .subscribe({
+          next: () => {
+            this.getEmployeesList();
+            this.createMessage('success', 'Employee added successfully');
+            this.createEmployeeForm.reset();
           },
-        ],
-      })
-      .subscribe({
-        next: () => {
-          this.getEmployeesList();
-          this.createMessage('success', 'Employee added successfully');
-        },
-        error: (error) => {
-          this.isEmployeesListLoading = false;
-          this.createMessage('error', 'Failed to add employee');
-          console.error(error);
-        },
+          error: (error) => {
+            this.isEmployeesListLoading = false;
+            this.createMessage('error', 'Failed to add employee');
+            console.error(error);
+          },
+        });
+      console.log('submit', this.createEmployeeForm.value);
+      this.isModalAddEmployeeVisible = false;
+    } else {
+      Object.values(this.createEmployeeForm.controls).forEach((control) => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
       });
+    }
   }
 
   removeEmployee(id: RemoveEmployeeModel) {
@@ -110,5 +143,15 @@ export class EmployeesPageComponent implements OnInit {
   }
   editEmployee() {
     console.log('Edit employee');
+  }
+
+  isModalAddEmployeeVisible = false;
+  openAddEmployeeModal(): void {
+    this.isModalAddEmployeeVisible = true;
+  }
+
+  onCloseAddEmployeeModal(): void {
+    this.isModalAddEmployeeVisible = false;
+    this.createEmployeeForm.reset();
   }
 }

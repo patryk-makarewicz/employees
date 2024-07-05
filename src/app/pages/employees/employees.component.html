@@ -1,7 +1,64 @@
 <div class="wrapper">
-  <div class="buttons">
-    <!-- <app-button label="Add" (click)="addEmployee()" /> -->
-    <app-button label="Add Employee" />
+  <nz-modal
+    [(nzVisible)]="isModalAddEmployeeVisible"
+    nzTitle="Add new Employee"
+    (nzOnCancel)="onCloseAddEmployeeModal()"
+    (nzOnOk)="addEmployee()"
+    nzAfterClose="destroy()"
+  >
+    <ng-container *nzModalContent>
+      <form nz-form [formGroup]="createEmployeeForm">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzFor="name">Name</nz-form-label>
+          <nz-form-control nzErrorTip="Please type employee name">
+            <input type="text" nz-input formControlName="name" placeholder="Type employee name" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzFor="surname">Surname</nz-form-label>
+          <nz-form-control nzErrorTip="Please type employee surname">
+            <input type="text" nz-input formControlName="surname" placeholder="Type employee surname" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzFor="position">Position</nz-form-label>
+          <nz-form-control nzErrorTip="Please type employee position">
+            <input type="text" nz-input formControlName="position" placeholder="Type employee position" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzFor="fte">FTE</nz-form-label>
+          <nz-form-control nzErrorTip="FTE is between 0 and 100%">
+            <input
+              type="number"
+              nz-input
+              formControlName="fte"
+              placeholder="Type employee FTE"
+              min="0"
+              max="100"
+              step="5"
+            />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzFor="salary">Salary</nz-form-label>
+          <nz-form-control nzErrorTip="Salary is between 0 and 1000000">
+            <input
+              type="number"
+              nz-input
+              formControlName="salary"
+              placeholder="Type employee salary"
+              min="0"
+              max="1000000"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </ng-container>
+  </nz-modal>
+
+  <div class="button">
+    <app-button label="Add Employee" (click)="openAddEmployeeModal()" />
   </div>
 
   <nz-table #employeesTable [nzData]="employeesList" [nzLoading]="isEmployeesListLoading">
@@ -36,30 +93,4 @@
       }
     </tbody>
   </nz-table>
-
-  <div>
-    <form [formGroup]="createEmployeeForm" (ngSubmit)="addEmployee()">
-      <label>
-        Name
-        <input type="text" formControlName="name" />
-      </label>
-      <label>
-        Surname
-        <input type="text" formControlName="surname" />
-      </label>
-      <label>
-        Position
-        <input type="text" formControlName="position" />
-      </label>
-      <label>
-        FTE
-        <input type="text" formControlName="fte" />
-      </label>
-      <label>
-        Salary
-        <input type="text" formControlName="salary" />
-      </label>
-      <button type="submit" [disabled]="!createEmployeeForm.valid">Submit</button>
-    </form>
-  </div>
 </div>
