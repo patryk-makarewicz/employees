@@ -41,6 +41,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 export class EmployeesPageComponent implements OnInit {
   employeesList: EmployeesModel[] = [];
   isEmployeesListLoading = true;
+  isSaveLoading = false;
   editingEmployeeId: string | null = null;
   isModalAddEmployeeVisible = false;
 
@@ -106,6 +107,7 @@ export class EmployeesPageComponent implements OnInit {
 
   addEmployee(): void {
     this.isEmployeesListLoading = true;
+    this.isSaveLoading = true;
     this.employees_service
       .addEmployee({
         records: [
@@ -126,9 +128,11 @@ export class EmployeesPageComponent implements OnInit {
           this.createMessage('success', 'Employee added successfully');
           this.createEmployeeForm.reset();
           this.isModalAddEmployeeVisible = false;
+          this.isSaveLoading = false;
         },
         error: (error) => {
           this.isEmployeesListLoading = false;
+          this.isSaveLoading = false;
           this.createMessage('error', 'Failed to add employee');
           console.error(error);
         },
@@ -173,6 +177,7 @@ export class EmployeesPageComponent implements OnInit {
 
   editEmployee(): void {
     this.isEmployeesListLoading = true;
+    this.isSaveLoading = true;
     this.employees_service
       .editEmployee({
         records: [
@@ -194,10 +199,12 @@ export class EmployeesPageComponent implements OnInit {
           this.createMessage('success', 'Employee edited successfully');
           this.createEmployeeForm.reset();
           this.isModalAddEmployeeVisible = false;
+          this.isSaveLoading = false;
           this.editingEmployeeId = null;
         },
         error: (error) => {
           this.isEmployeesListLoading = false;
+          this.isSaveLoading = false;
           this.createMessage('error', 'Failed to edit employee');
           console.error(error);
         },

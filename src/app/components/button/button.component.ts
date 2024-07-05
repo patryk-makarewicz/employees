@@ -9,8 +9,10 @@ import { NzButtonModule, NzButtonType } from 'ng-zorro-antd/button';
   styleUrl: './button.component.scss',
 })
 export class ButtonComponent {
-  @Input() type: NzButtonType = 'primary';
+  @Input() nzType: NzButtonType = 'primary';
   @Input() label = 'Label';
   @Input() nzDanger = 'false';
   @Input() nzGhost = 'false';
+  @Input() disabled = 'false';
+  @Input() nzLoading = 'false';
 }

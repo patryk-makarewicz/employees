@@ -1,1 +1,10 @@
-<button nz-button [nzType]="type" [nzDanger]="nzDanger" [nzGhost]="nzGhost">{{ label }}</button>
+<button
+  nz-button
+  [nzType]="nzType"
+  [nzDanger]="nzDanger"
+  [nzGhost]="nzGhost"
+  [disabled]="disabled"
+  [nzLoading]="nzLoading"
+>
+  {{ label }}
+</button>

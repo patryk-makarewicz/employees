@@ -4,7 +4,8 @@
     [nzTitle]="editingEmployeeId ? 'Edit Employee' : 'Add new Employee'"
     (nzOnCancel)="onCloseAddEmployeeModal()"
     (nzOnOk)="saveEmployee()"
-    nzAfterClose="destroy()"
+    nzClosable="{{ !isSaveLoading }}"
+    nzMaskClosable="{{ !isSaveLoading }}"
   >
     <ng-container *nzModalContent>
       <form nz-form [formGroup]="createEmployeeForm">
@@ -55,10 +56,20 @@
         </nz-form-item>
       </form>
     </ng-container>
+    <div *nzModalFooter class="footer">
+      <app-button
+        label="Cancel"
+        nzType="primary"
+        nzGhost
+        (click)="onCloseAddEmployeeModal()"
+        disabled="{{ isSaveLoading }}"
+      />
+      <app-button label="Save" (click)="saveEmployee()" nzLoading="{{ isSaveLoading }}" />
+    </div>
   </nz-modal>
 
   <div class="button">
-    <app-button label="Add Employee" (click)="openAddEmployeeModal()" />
+    <app-button label="Add Employee" (click)="openAddEmployeeModal()" disabled="{{ isEmployeesListLoading }}" />
   </div>
 
   <nz-table #employeesTable [nzData]="employeesList" [nzLoading]="isEmployeesListLoading">
