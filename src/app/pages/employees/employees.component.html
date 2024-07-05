@@ -1,4 +1,10 @@
 <div class="wrapper">
+  <div class="buttons">
+    <app-button label="Add" (click)="addEmployee()" />
+    <app-button label="Edit" (click)="editEmployee()" nzGhost />
+    <app-button label="Remove" (click)="removeEmployee()" type="default" nzDanger />
+  </div>
+
   <nz-table #employeesTable [nzData]="employeesList" [nzLoading]="isEmployeesListLoading">
     <thead>
       <tr>

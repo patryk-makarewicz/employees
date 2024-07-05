@@ -5,11 +5,12 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { EmployeesModel } from '../../service/employees.model';
 import { EmployeesService } from '../../service/employees.service';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
+import { ButtonComponent } from '../../components';
 
 @Component({
   selector: 'app-employees-page',
   standalone: true,
-  imports: [NzIconModule, NzTableModule, NzDividerModule, NzMessageModule],
+  imports: [NzIconModule, NzTableModule, NzDividerModule, NzMessageModule, ButtonComponent],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.scss',
 })
@@ -38,5 +39,14 @@ export class EmployeesPageComponent implements OnInit {
         console.error(error);
       },
     });
+  }
+  addEmployee() {
+    console.log('Add employee');
+  }
+  editEmployee() {
+    console.log('Edit employee');
+  }
+  removeEmployee() {
+    console.log('Remove employee');
   }
 }

@@ -11,4 +11,6 @@ import { NzButtonModule, NzButtonType } from 'ng-zorro-antd/button';
 export class ButtonComponent {
   @Input() type: NzButtonType = 'primary';
   @Input() label = 'Label';
+  @Input() nzDanger = 'false';
+  @Input() nzGhost = 'false';
 }
