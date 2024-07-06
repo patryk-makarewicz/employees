@@ -11,4 +11,5 @@ import { NgOptimizedImage } from '@angular/common';
 export class FooterComponent {
   logoUrl = '/assets/makaDev.png';
   logoAlt = 'makaDev logo';
+  currentYear: number = new Date().getFullYear();
 }
