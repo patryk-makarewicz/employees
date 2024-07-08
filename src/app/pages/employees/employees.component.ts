@@ -1,16 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-
+import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
 import { EmployeesModel } from '../../service/employees.model';
 import { EmployeesService } from '../../service/employees.service';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
 import { ButtonComponent, TableComponent, ModalComponent } from '../../components';
 import { FormControl, FormGroup, Validators, NonNullableFormBuilder } from '@angular/forms';
+import { toastMessage, handleError, resetFormAndCloseModal } from '../../utils';
 
 @Component({
   selector: 'app-employees-page',
   standalone: true,
   imports: [NzMessageModule, ButtonComponent, TableComponent, ModalComponent],
   templateUrl: './employees.component.html',
+  styleUrl: './employees.component.scss',
 })
 export class EmployeesPageComponent implements OnInit {
   employeesList: EmployeesModel[] = [];
@@ -21,14 +24,10 @@ export class EmployeesPageComponent implements OnInit {
   isModalAddEmployeeVisible = false;
 
   constructor(
-    private employees_service: EmployeesService,
+    private employeesService: EmployeesService,
     private message: NzMessageService,
     private fb: NonNullableFormBuilder
   ) {}
-
-  createMessage(type: string, content: string): void {
-    this.message.create(type, content);
-  }
 
   ngOnInit() {
     this.getEmployeesList();
@@ -36,17 +35,18 @@ export class EmployeesPageComponent implements OnInit {
 
   getEmployeesList() {
     this.isEmployeesListLoading = true;
-    this.employees_service.getEmployeesList().subscribe({
-      next: (employeesList) => {
-        this.employeesList = employeesList.records;
-        this.isEmployeesListLoading = false;
-      },
-      error: (error) => {
-        this.isEmployeesListLoading = false;
-        this.createMessage('error', 'Failed to load employees');
-        console.error(error);
-      },
-    });
+    this.employeesService
+      .getEmployeesList()
+      .pipe(
+        tap((employeesList) => {
+          this.employeesList = employeesList.records;
+        }),
+        catchError(handleError(this.message, 'Failed to load employees')),
+        finalize(() => {
+          this.isEmployeesListLoading = false;
+        })
+      )
+      .subscribe();
   }
 
   createEmployeeForm: FormGroup<{
@@ -83,7 +83,8 @@ export class EmployeesPageComponent implements OnInit {
   addEmployee(): void {
     this.isEmployeesListLoading = true;
     this.isSaveLoading = true;
-    this.employees_service
+
+    this.employeesService
       .addEmployee({
         records: [
           {
@@ -97,95 +98,116 @@ export class EmployeesPageComponent implements OnInit {
           },
         ],
       })
-      .subscribe({
-        next: () => {
-          this.getEmployeesList();
-          this.createMessage('success', 'Employee added successfully');
-          this.createEmployeeForm.reset();
-          this.isModalAddEmployeeVisible = false;
-          this.isSaveLoading = false;
-        },
-        error: (error) => {
+      .pipe(
+        tap(() => toastMessage(this.message, 'success', 'Employee added successfully')),
+        switchMap(() => this.employeesService.getEmployeesList()),
+        tap((employeesList) => {
+          this.employeesList = employeesList.records;
+        }),
+        catchError(handleError(this.message, 'Failed to add employee')),
+        finalize(() => {
           this.isEmployeesListLoading = false;
           this.isSaveLoading = false;
-          this.createMessage('error', 'Failed to add employee');
-          console.error(error);
-        },
-      });
+          resetFormAndCloseModal(
+            this.createEmployeeForm,
+            (visible: boolean) => (this.isModalAddEmployeeVisible = visible)
+          );
+        })
+      )
+      .subscribe();
   }
 
   removeEmployee(id: string) {
     this.isEmployeesListLoading = true;
-    this.employees_service.removeEmployee(id).subscribe({
-      next: () => {
-        this.getEmployeesList();
-        this.createMessage('success', 'Employee removed successfully');
-      },
-      error: (error) => {
-        this.isEmployeesListLoading = false;
-        this.createMessage('error', 'Failed to remove employee');
-        console.error(error);
-      },
-    });
+
+    this.employeesService
+      .removeEmployee(id)
+      .pipe(
+        tap(() => {
+          toastMessage(this.message, 'success', 'Employee removed successfully');
+        }),
+        switchMap(() => this.employeesService.getEmployeesList()),
+        tap((employeesList) => {
+          this.employeesList = employeesList.records;
+        }),
+        catchError((error) => {
+          toastMessage(this.message, 'error', 'Failed to remove employee');
+          console.error(error);
+          return of(null);
+        }),
+        finalize(() => {
+          this.isEmployeesListLoading = false;
+        })
+      )
+      .subscribe();
   }
 
   getEmployee(id: string) {
     this.isModalAddEmployeeVisible = true;
     this.isEmployeeDataLoading = true;
     this.editingEmployeeId = id;
-    this.employees_service.getEmployee(id).subscribe({
-      next: (employee) => {
-        this.createEmployeeForm.patchValue({
-          name: employee.fields.name,
-          surname: employee.fields.surname,
-          position: employee.fields.position,
-          fte: employee.fields.fte * 100,
-          salary: employee.fields.salary,
-        });
-        this.isEmployeeDataLoading = false;
-      },
-      error: (error) => {
-        this.isEmployeeDataLoading = false;
-        this.createMessage('error', 'Failed to get employee data');
-        console.error(error);
-      },
-    });
+
+    this.employeesService
+      .getEmployee(id)
+      .pipe(
+        tap((employee) => {
+          this.createEmployeeForm.patchValue({
+            name: employee.fields.name,
+            surname: employee.fields.surname,
+            position: employee.fields.position,
+            fte: employee.fields.fte * 100,
+            salary: employee.fields.salary,
+          });
+        }),
+        catchError(handleError(this.message, 'Failed to get employee data')),
+        finalize(() => {
+          this.isEmployeeDataLoading = false;
+        })
+      )
+      .subscribe();
   }
 
   editEmployee(): void {
     this.isEmployeesListLoading = true;
     this.isSaveLoading = true;
-    this.employees_service
-      .editEmployee({
-        records: [
-          {
-            id: this.editingEmployeeId!,
-            fields: {
-              name: this.createEmployeeForm.value.name!,
-              surname: this.createEmployeeForm.value.surname!,
-              position: this.createEmployeeForm.value.position!,
-              fte: this.createEmployeeForm.value.fte! / 100,
-              salary: this.createEmployeeForm.value.salary!,
-            },
+
+    const employeeData = {
+      records: [
+        {
+          id: this.editingEmployeeId!,
+          fields: {
+            name: this.createEmployeeForm.value.name!,
+            surname: this.createEmployeeForm.value.surname!,
+            position: this.createEmployeeForm.value.position!,
+            fte: this.createEmployeeForm.value.fte! / 100,
+            salary: this.createEmployeeForm.value.salary!,
           },
-        ],
-      })
-      .subscribe({
-        next: () => {
-          this.getEmployeesList();
-          this.createMessage('success', 'Employee edited successfully');
-          this.createEmployeeForm.reset();
-          this.isModalAddEmployeeVisible = false;
-          this.isSaveLoading = false;
-          this.editingEmployeeId = null;
         },
-        error: (error) => {
+      ],
+    };
+
+    this.employeesService
+      .editEmployee(employeeData)
+      .pipe(
+        tap(() => {
+          toastMessage(this.message, 'success', 'Employee edited successfully');
+        }),
+        switchMap(() => this.employeesService.getEmployeesList()),
+        tap((employeesList) => {
+          this.employeesList = employeesList.records;
+        }),
+        catchError(handleError(this.message, 'Failed to edit employee')),
+        finalize(() => {
           this.isEmployeesListLoading = false;
           this.isSaveLoading = false;
-          this.createMessage('error', 'Failed to edit employee');
-          console.error(error);
-        },
-      });
+          resetFormAndCloseModal(
+            this.createEmployeeForm,
+            (visible: boolean) => (this.isModalAddEmployeeVisible = visible)
+          );
+          this.editingEmployeeId = null;
+        })
+      )
+      .subscribe();
   }
 
   openAddEmployeeModal(): void {
@@ -195,8 +217,7 @@ export class EmployeesPageComponent implements OnInit {
   }
 
   onCloseAddEmployeeModal(): void {
-    this.isModalAddEmployeeVisible = false;
-    this.createEmployeeForm.reset();
+    resetFormAndCloseModal(this.createEmployeeForm, (visible: boolean) => (this.isModalAddEmployeeVisible = visible));
     this.editingEmployeeId = null;
   }
 }
