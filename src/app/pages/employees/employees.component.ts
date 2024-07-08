@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
+
 import { EmployeesModel } from '../../service/employees.model';
 import { EmployeesService } from '../../service/employees.service';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
 import { ButtonComponent, TableComponent, ModalComponent } from '../../components';
 import { FormControl, FormGroup, Validators, NonNullableFormBuilder } from '@angular/forms';
-import { toastMessage, handleError, resetFormAndCloseModal } from '../../utils';
+import { toastMessage, handleError, resetFormAndCloseModal, validateForm, getEmployeeFormFields } from '../../utils';
 
 @Component({
   selector: 'app-employees-page',
@@ -64,23 +64,18 @@ export class EmployeesPageComponent implements OnInit {
   });
 
   saveEmployee(): void {
-    if (this.createEmployeeForm.valid) {
-      if (this.editingEmployeeId) {
-        this.editEmployee();
-      } else {
-        this.addEmployee();
-      }
+    if (this.editingEmployeeId) {
+      this.editEmployee();
     } else {
-      Object.values(this.createEmployeeForm.controls).forEach((control) => {
-        if (control.invalid) {
-          control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
-        }
-      });
+      this.addEmployee();
     }
   }
 
   addEmployee(): void {
+    if (!validateForm(this.createEmployeeForm)) {
+      return;
+    }
+
     this.isEmployeesListLoading = true;
     this.isSaveLoading = true;
 
@@ -88,13 +83,7 @@ export class EmployeesPageComponent implements OnInit {
       .addEmployee({
         records: [
           {
-            fields: {
-              name: this.createEmployeeForm.value.name!,
-              surname: this.createEmployeeForm.value.surname!,
-              position: this.createEmployeeForm.value.position!,
-              fte: this.createEmployeeForm.value.fte! / 100,
-              salary: this.createEmployeeForm.value.salary!,
-            },
+            fields: getEmployeeFormFields(this.createEmployeeForm),
           },
         ],
       })
@@ -130,11 +119,7 @@ export class EmployeesPageComponent implements OnInit {
         tap((employeesList) => {
           this.employeesList = employeesList.records;
         }),
-        catchError((error) => {
-          toastMessage(this.message, 'error', 'Failed to remove employee');
-          console.error(error);
-          return of(null);
-        }),
+        catchError(handleError(this.message, 'Failed to remove employee')),
         finalize(() => {
           this.isEmployeesListLoading = false;
         })
@@ -168,6 +153,10 @@ export class EmployeesPageComponent implements OnInit {
   }
 
   editEmployee(): void {
+    if (!validateForm(this.createEmployeeForm)) {
+      return;
+    }
+
     this.isEmployeesListLoading = true;
     this.isSaveLoading = true;
 
@@ -175,13 +164,7 @@ export class EmployeesPageComponent implements OnInit {
       records: [
         {
           id: this.editingEmployeeId!,
-          fields: {
-            name: this.createEmployeeForm.value.name!,
-            surname: this.createEmployeeForm.value.surname!,
-            position: this.createEmployeeForm.value.position!,
-            fte: this.createEmployeeForm.value.fte! / 100,
-            salary: this.createEmployeeForm.value.salary!,
-          },
+          fields: getEmployeeFormFields(this.createEmployeeForm),
         },
       ],
     };
