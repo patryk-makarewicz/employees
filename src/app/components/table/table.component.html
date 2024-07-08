@@ -2,7 +2,9 @@
   #employeesTable
   [nzData]="employeesList"
   [nzLoading]="isEmployeesListLoading"
-  [nzScroll]="{ y: '440px', x: '920px' }"
+  [nzScroll]="{ y: '400px', x: '920px' }"
+  nzShowPagination
+  [nzPageSize]="6"
 >
   <thead>
     <tr>
@@ -15,7 +17,7 @@
     </tr>
   </thead>
   <tbody>
-    @for (employee of employeesList; track employee.id) {
+    @for (employee of employeesTable.data; track employee.id) {
       <tr>
         <td>{{ employee.fields.name }}</td>
         <td>{{ employee.fields.surname }}</td>
