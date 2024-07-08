@@ -1,120 +1,20 @@
 <div class="wrapper">
-  <nz-modal
-    [(nzVisible)]="isModalAddEmployeeVisible"
-    [nzTitle]="editingEmployeeId ? 'Edit Employee' : 'Add new Employee'"
-    (nzOnCancel)="onCloseAddEmployeeModal()"
-    (nzOnOk)="saveEmployee()"
-    nzClosable="{{ !isSaveLoading }}"
-    nzMaskClosable="{{ !isSaveLoading }}"
-  >
-    <ng-container *nzModalContent>
-      @if (isEmployeeDataLoading) {
-        <div class="loading">
-          <nz-spin nzSimple></nz-spin>
-        </div>
-      } @else {
-        <form nz-form [formGroup]="createEmployeeForm">
-          <nz-form-item>
-            <nz-form-label [nzSpan]="4" nzFor="name">Name</nz-form-label>
-            <nz-form-control nzErrorTip="Please type employee name">
-              <input type="text" nz-input formControlName="name" placeholder="Type employee name" />
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSpan]="4" nzFor="surname">Surname</nz-form-label>
-            <nz-form-control nzErrorTip="Please type employee surname">
-              <input type="text" nz-input formControlName="surname" placeholder="Type employee surname" />
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSpan]="4" nzFor="position">Position</nz-form-label>
-            <nz-form-control nzErrorTip="Please type employee position">
-              <input type="text" nz-input formControlName="position" placeholder="Type employee position" />
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSpan]="4" nzFor="fte">FTE</nz-form-label>
-            <nz-form-control nzErrorTip="FTE is between 0 and 100%">
-              <input
-                type="number"
-                nz-input
-                formControlName="fte"
-                placeholder="Type employee FTE"
-                min="0"
-                max="100"
-                step="5"
-              />
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSpan]="4" nzFor="salary">Salary</nz-form-label>
-            <nz-form-control nzErrorTip="Salary is between 0 and 1000000">
-              <input
-                type="number"
-                nz-input
-                formControlName="salary"
-                placeholder="Type employee salary"
-                min="0"
-                max="1000000"
-              />
-            </nz-form-control>
-          </nz-form-item>
-        </form>
-      }
-    </ng-container>
-    <div *nzModalFooter class="footer">
-      <app-button
-        label="Cancel"
-        nzType="primary"
-        nzGhost
-        (click)="onCloseAddEmployeeModal()"
-        disabled="{{ isSaveLoading }}"
-      />
-      <app-button label="Save" (click)="saveEmployee()" nzLoading="{{ isSaveLoading }}" />
-    </div>
-  </nz-modal>
-
+  <app-modal
+    [(isVisible)]="isModalAddEmployeeVisible"
+    [editingEmployeeId]="editingEmployeeId"
+    [isSaveLoading]="isSaveLoading"
+    [isEmployeeDataLoading]="isEmployeeDataLoading"
+    [createEmployeeForm]="createEmployeeForm"
+    (closeModal)="onCloseAddEmployeeModal()"
+    (saveEmployee)="saveEmployee()"
+  />
   <div class="button">
     <app-button label="Add Employee" (click)="openAddEmployeeModal()" disabled="{{ isEmployeesListLoading }}" />
   </div>
-
-  <div>
-    <nz-table
-      #employeesTable
-      [nzData]="employeesList"
-      [nzLoading]="isEmployeesListLoading"
-      [nzScroll]="{ y: '440px', x: '920px' }"
-    >
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Surname</th>
-          <th>Position</th>
-          <th>FTE</th>
-          <th>Salary</th>
-          <th>ACTIONS</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (employee of employeesList; track employee.id) {
-          <tr>
-            <td>{{ employee.fields.name }}</td>
-            <td>{{ employee.fields.surname }}</td>
-            <td>{{ employee.fields.position }}</td>
-            <td>{{ employee.fields.fte * 100 + '%' }}</td>
-            <td>{{ '$' + employee.fields.salary }}</td>
-            <td>
-              <button nz-button nzType="primary" nzShape="circle" (click)="getEmployee(employee.id)">
-                <span nz-icon nzType="edit" nzTheme="outline"></span>
-              </button>
-              <nz-divider nzType="vertical"></nz-divider>
-              <button nz-button nzType="primary" nzShape="circle" nzDanger (click)="removeEmployee(employee.id)">
-                <span nz-icon nzType="delete" nzTheme="outline"></span>
-              </button>
-            </td>
-          </tr>
-        }
-      </tbody>
-    </nz-table>
-  </div>
+  <app-table
+    [employeesList]="employeesList"
+    [isEmployeesListLoading]="isEmployeesListLoading"
+    (editEmployee)="getEmployee($event)"
+    (removeEmployee)="removeEmployee($event)"
+  />
 </div>

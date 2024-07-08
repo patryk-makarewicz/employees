@@ -10,7 +10,9 @@
     <ng-template #avatarTemplate
       ><img class="avatar" [ngSrc]="logoUrl" [alt]="logoAlt" width="40" height="40"
     /></ng-template>
-    <ng-template #coverTemplate><img [ngSrc]="imageUrl" [alt]="imageAlt" width="300" height="200" /></ng-template>
+    <ng-template #coverTemplate
+      ><img [ngSrc]="imageUrl" [alt]="imageAlt" width="300" height="225" priority
+    /></ng-template>
     <ng-template #actionGithub>
       <a
         class="link"
