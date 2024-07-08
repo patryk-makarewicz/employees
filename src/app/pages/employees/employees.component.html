@@ -79,42 +79,11 @@
   </div>
 
   <div>
-    <nz-table
-      #employeesTable
-      [nzData]="employeesList"
-      [nzLoading]="isEmployeesListLoading"
-      [nzScroll]="{ y: '440px', x: '920px' }"
-    >
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Surname</th>
-          <th>Position</th>
-          <th>FTE</th>
-          <th>Salary</th>
-          <th>ACTIONS</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (employee of employeesList; track employee.id) {
-          <tr>
-            <td>{{ employee.fields.name }}</td>
-            <td>{{ employee.fields.surname }}</td>
-            <td>{{ employee.fields.position }}</td>
-            <td>{{ employee.fields.fte * 100 + '%' }}</td>
-            <td>{{ '$' + employee.fields.salary }}</td>
-            <td>
-              <button nz-button nzType="primary" nzShape="circle" (click)="getEmployee(employee.id)">
-                <span nz-icon nzType="edit" nzTheme="outline"></span>
-              </button>
-              <nz-divider nzType="vertical"></nz-divider>
-              <button nz-button nzType="primary" nzShape="circle" nzDanger (click)="removeEmployee(employee.id)">
-                <span nz-icon nzType="delete" nzTheme="outline"></span>
-              </button>
-            </td>
-          </tr>
-        }
-      </tbody>
-    </nz-table>
+    <app-table
+      [employeesList]="employeesList"
+      [isEmployeesListLoading]="isEmployeesListLoading"
+      (editEmployee)="getEmployee($event)"
+      (removeEmployee)="removeEmployee($event)"
+    />
   </div>
 </div>

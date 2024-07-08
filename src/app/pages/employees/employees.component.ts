@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzTableModule } from 'ng-zorro-antd/table';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
+
 import { EmployeesModel } from '../../service/employees.model';
 import { EmployeesService } from '../../service/employees.service';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
-import { ButtonComponent } from '../../components';
+import { ButtonComponent, TableComponent } from '../../components';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -15,7 +13,6 @@ import {
   NonNullableFormBuilder,
 } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -24,18 +21,15 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
   selector: 'app-employees-page',
   standalone: true,
   imports: [
-    NzIconModule,
-    NzTableModule,
-    NzDividerModule,
     NzMessageModule,
     ButtonComponent,
     FormsModule,
     ReactiveFormsModule,
-    NzButtonModule,
     NzModalModule,
     NzFormModule,
     NzInputModule,
     NzSpinModule,
+    TableComponent,
   ],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.scss',
