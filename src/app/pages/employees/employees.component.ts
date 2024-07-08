@@ -3,36 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { EmployeesModel } from '../../service/employees.model';
 import { EmployeesService } from '../../service/employees.service';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
-import { ButtonComponent, TableComponent } from '../../components';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  FormControl,
-  FormGroup,
-  Validators,
-  NonNullableFormBuilder,
-} from '@angular/forms';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { ButtonComponent, TableComponent, ModalComponent } from '../../components';
+import { FormControl, FormGroup, Validators, NonNullableFormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-employees-page',
   standalone: true,
-  imports: [
-    NzMessageModule,
-    ButtonComponent,
-    FormsModule,
-    ReactiveFormsModule,
-    NzModalModule,
-    NzFormModule,
-    NzInputModule,
-    NzSpinModule,
-    TableComponent,
-  ],
+  imports: [NzMessageModule, ButtonComponent, TableComponent, ModalComponent],
   templateUrl: './employees.component.html',
-  styleUrl: './employees.component.scss',
 })
 export class EmployeesPageComponent implements OnInit {
   employeesList: EmployeesModel[] = [];
