@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, Router, NavigationEnd, Event } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
-import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { filter, map } from 'rxjs/operators';
 import { routes } from '../../app.routes';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
-  imports: [RouterLink, NgOptimizedImage, NzMenuModule],
+  imports: [RouterLink, NgOptimizedImage, NzTabsModule],
 })
 export class HeaderComponent implements OnInit {
   logoUrl = '/assets/makaDev.png';
