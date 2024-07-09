@@ -2,12 +2,14 @@
   <img [ngSrc]="logoUrl" [alt]="logoAlt" width="40" height="40" />
   <h1>Employees</h1>
   <nav>
-    <ul nz-menu nzMode="horizontal">
-      @for (route of routes; track route.path) {
-        <li nz-menu-item [nzSelected]="isActive('/' + route.path)">
-          <a [routerLink]="route.path">{{ route.title }}</a>
-        </li>
-      }
-    </ul>
+    <div>
+      <nz-tabset nzLinkRouter nzSize="large">
+        @for (route of routes; track route.path) {
+          <nz-tab>
+            <a *nzTabLink nz-tab-link [routerLink]="[route.path]">{{ route.title }}</a>
+          </nz-tab>
+        }
+      </nz-tabset>
+    </div>
   </nav>
 </header>
