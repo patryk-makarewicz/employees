@@ -52,3 +52,15 @@ app-about-page {
   margin: auto;
   padding: 0 10px;
 }
+
+// ----- Antd - Tabs custom styles ----- //
+
+.ant-tabs-top > .ant-tabs-nav::before {
+  border-bottom: none;
+}
+
+.ant-tabs,
+.ant-tabs-top,
+.ant-tabs-large > .ant-tabs-nav {
+  margin: 0;
+}
