@@ -1,3 +1,17 @@
+<nz-modal
+  [(nzVisible)]="isRemoveModalVisible"
+  nzTitle="Remove Employee"
+  (nzOnCancel)="onCloseRemoveModal()"
+  (nzOnOk)="onRemoveEmployee(employeeData.id)"
+>
+  <ng-container *nzModalContent>
+    <p>Do you want to remove {{ employeeData.fields.name }} {{ employeeData.fields.surname }}?</p>
+  </ng-container>
+  <div *nzModalFooter class="footer">
+    <app-button label="Cancel" nzType="primary" nzGhost (click)="onCloseRemoveModal()" />
+    <app-button label="Remove" (click)="onRemoveEmployee(employeeData.id)" nzDanger />
+  </div>
+</nz-modal>
 <nz-table
   #employeesTable
   [nzData]="employeesList"
@@ -29,7 +43,7 @@
             <span nz-icon nzType="edit" nzTheme="outline"></span>
           </button>
           <nz-divider nzType="vertical"></nz-divider>
-          <button nz-button nzType="primary" nzShape="circle" nzDanger (click)="onRemoveEmployee(employee.id)">
+          <button nz-button nzType="primary" nzShape="circle" nzDanger (click)="onOpenRemoveModal(employee)">
             <span nz-icon nzType="delete" nzTheme="outline"></span>
           </button>
         </td>
