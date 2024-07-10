@@ -1,0 +1,14 @@
+<nz-modal
+  [(nzVisible)]="isRemoveModalVisible"
+  nzTitle="Remove Employee"
+  (nzOnCancel)="onCloseRemoveModal()"
+  (nzOnOk)="onRemoveEmployee(employeeData.id)"
+>
+  <ng-container *nzModalContent>
+    <p>Do you want to remove {{ employeeData.fields.name }} {{ employeeData.fields.surname }}?</p>
+  </ng-container>
+  <div *nzModalFooter class="footer">
+    <app-button label="Cancel" nzType="primary" nzGhost (click)="onCloseRemoveModal()" />
+    <app-button label="Remove" (click)="onRemoveEmployee(employeeData.id)" nzDanger />
+  </div>
+</nz-modal>

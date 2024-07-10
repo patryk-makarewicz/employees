@@ -1,5 +1,5 @@
 <div class="wrapper">
-  <app-modal
+  <app-modal-add
     [(isVisible)]="isModalAddEmployeeVisible"
     [editingEmployeeId]="editingEmployeeId"
     [isSaveLoading]="isSaveLoading"
@@ -8,13 +8,19 @@
     (closeModal)="onCloseAddEmployeeModal()"
     (saveEmployee)="saveEmployee()"
   />
+  <app-modal-remove
+    [(isRemoveModalVisible)]="isRemoveModalVisible"
+    [employeeData]="employeeData"
+    (closeModal)="onCloseRemoveModal()"
+    (removeEmployee)="onRemoveEmployee(employeeData.id)"
+  />
   <div class="button">
-    <app-button label="Add Employee" (click)="openAddEmployeeModal()" disabled="{{ isEmployeesListLoading }}" />
+    <app-button label="Add Employee" (click)="onOpenAddEmployeeModal()" disabled="{{ isEmployeesListLoading }}" />
   </div>
   <app-table
     [employeesList]="employeesList"
     [isEmployeesListLoading]="isEmployeesListLoading"
     (editEmployee)="getEmployee($event)"
-    (removeEmployee)="removeEmployee($event)"
+    (openRemoveEmployeeModal)="onOpenRemoveModal($event)"
   />
 </div>
