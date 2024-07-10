@@ -4,12 +4,12 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { EmployeesModel } from '../../service/employees.model';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { ButtonComponent } from '../button/button.component';
+import { RemoveModalComponent } from '../modals/remove/remove.component';
+
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [NzTableModule, NzDividerModule, NzButtonModule, NzIconModule, NzModalModule, ButtonComponent],
+  imports: [NzTableModule, NzDividerModule, NzButtonModule, NzIconModule, RemoveModalComponent],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
 })
