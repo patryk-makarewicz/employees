@@ -8,6 +8,12 @@
     (closeModal)="onCloseAddEmployeeModal()"
     (saveEmployee)="saveEmployee()"
   />
+  <app-modal-remove
+    [(isRemoveModalVisible)]="isRemoveModalVisible"
+    [employeeData]="employeeData"
+    (closeModal)="onCloseRemoveModal()"
+    (removeEmployee)="onRemoveEmployee(employeeData.id)"
+  />
   <div class="button">
     <app-button label="Add Employee" (click)="onOpenAddEmployeeModal()" disabled="{{ isEmployeesListLoading }}" />
   </div>
@@ -15,6 +21,6 @@
     [employeesList]="employeesList"
     [isEmployeesListLoading]="isEmployeesListLoading"
     (editEmployee)="getEmployee($event)"
-    (removeEmployee)="removeEmployee($event)"
+    (openRemoveEmployeeModal)="onOpenRemoveModal($event)"
   />
 </div>

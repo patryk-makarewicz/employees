@@ -14,30 +14,17 @@ import { RemoveModalComponent } from '../modals/remove/remove.component';
   styleUrl: './table.component.scss',
 })
 export class TableComponent {
-  isRemoveModalVisible = false;
-  employeeData = {} as EmployeesModel;
-
   @Input() employeesList: EmployeesModel[] = [];
   @Input() isEmployeesListLoading = false;
 
   @Output() editEmployee = new EventEmitter<string>();
-  @Output() removeEmployee = new EventEmitter<string>();
+  @Output() openRemoveEmployeeModal = new EventEmitter<EmployeesModel>();
 
   onEditEmployee(id: string): void {
     this.editEmployee.emit(id);
   }
 
-  onRemoveEmployee(id: string): void {
-    this.removeEmployee.emit(id);
-    this.isRemoveModalVisible = false;
-  }
-
-  onOpenRemoveModal(employee: EmployeesModel): void {
-    this.isRemoveModalVisible = true;
-    this.employeeData = employee;
-  }
-
-  onCloseRemoveModal(): void {
-    this.isRemoveModalVisible = false;
+  onOpenRemoveModal(employee: EmployeesModel) {
+    this.openRemoveEmployeeModal.emit(employee);
   }
 }

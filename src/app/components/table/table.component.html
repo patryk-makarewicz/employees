@@ -1,9 +1,3 @@
-<app-modal-remove
-  [(isRemoveModalVisible)]="isRemoveModalVisible"
-  [employeeData]="employeeData"
-  (closeModal)="onCloseRemoveModal()"
-  (removeEmployee)="onRemoveEmployee(employeeData.id)"
-/>
 <nz-table
   #employeesTable
   [nzData]="employeesList"

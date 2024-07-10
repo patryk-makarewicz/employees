@@ -25,6 +25,5 @@ export class RemoveModalComponent {
 
   onRemoveEmployee(id: string): void {
     this.removeEmployee.emit(id);
-    this.isRemoveModalVisible = false;
   }
 }
