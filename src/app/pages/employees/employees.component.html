@@ -1,5 +1,5 @@
 <div class="wrapper">
-  <app-modal
+  <app-modal-add
     [(isVisible)]="isModalAddEmployeeVisible"
     [editingEmployeeId]="editingEmployeeId"
     [isSaveLoading]="isSaveLoading"
@@ -9,7 +9,7 @@
     (saveEmployee)="saveEmployee()"
   />
   <div class="button">
-    <app-button label="Add Employee" (click)="openAddEmployeeModal()" disabled="{{ isEmployeesListLoading }}" />
+    <app-button label="Add Employee" (click)="onOpenAddEmployeeModal()" disabled="{{ isEmployeesListLoading }}" />
   </div>
   <app-table
     [employeesList]="employeesList"

@@ -4,14 +4,14 @@ import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
 import { EmployeesModel } from '../../service/employees.model';
 import { EmployeesService } from '../../service/employees.service';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
-import { ButtonComponent, TableComponent, ModalComponent } from '../../components';
+import { ButtonComponent, TableComponent, AddModalComponent } from '../../components';
 import { FormControl, FormGroup, Validators, NonNullableFormBuilder } from '@angular/forms';
 import { toastMessage, handleError, resetFormAndCloseModal, validateForm, getEmployeeFormFields } from '../../utils';
 
 @Component({
   selector: 'app-employees-page',
   standalone: true,
-  imports: [NzMessageModule, ButtonComponent, TableComponent, ModalComponent],
+  imports: [NzMessageModule, ButtonComponent, TableComponent, AddModalComponent],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.scss',
 })
@@ -193,7 +193,7 @@ export class EmployeesPageComponent implements OnInit {
       .subscribe();
   }
 
-  openAddEmployeeModal(): void {
+  onOpenAddEmployeeModal(): void {
     this.isModalAddEmployeeVisible = true;
     this.editingEmployeeId = null;
     this.createEmployeeForm.reset();
